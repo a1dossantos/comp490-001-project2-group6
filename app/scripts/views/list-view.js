@@ -55,6 +55,7 @@ class ListView extends View {
         this.listenTo(this.views.search, 'select-next', this.selectNext);
         this.listenTo(this.views.search, 'create-entry', this.createEntry);
         this.listenTo(this.views.search, 'create-group', this.createGroup);
+        this.listenTo(this.views.search, 'import-csv', this.importCSV);
         this.listenTo(this.views.search, 'create-template', this.createTemplate);
         this.listenTo(this, 'show', this.viewShown);
         this.listenTo(this, 'hide', this.viewHidden);
@@ -302,6 +303,8 @@ class ListView extends View {
         this.render();
         this.selectItem(templateEntry);
     }
+
+    importCSV() {}
 
     selectItem(item) {
         this.presenter.activeEntryId = item.id;
