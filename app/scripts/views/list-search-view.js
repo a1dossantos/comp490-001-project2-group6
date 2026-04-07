@@ -422,6 +422,9 @@ class ListSearchView extends View {
             case 'tmpl':
                 this.emit('create-template');
                 break;
+            case 'import-csv':
+                this.emit('import-csv');
+                break;
             default:
                 if (this.entryTemplates[e.item]) {
                     this.emit('create-entry', { template: this.entryTemplates[e.item] });
