@@ -304,7 +304,21 @@ class ListView extends View {
         this.selectItem(templateEntry);
     }
 
-    importCSV() {}
+    importCSV() {
+        // Create a hidden file input element
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv'; // Restrict to CSV files
+
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                Events.emit('import-csv-requested', file); // Sends signal to handle CSV
+            }
+        };
+
+        input.click(); // Open the system file dialog
+    }
 
     selectItem(item) {
         this.presenter.activeEntryId = item.id;
