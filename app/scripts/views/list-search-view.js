@@ -148,7 +148,12 @@ class ListSearchView extends View {
                     ? null
                     : `(${Locale.searchShiftClickOr} ${Shortcuts.altShortcutSymbol(true)})`
             },
-            { value: 'group', icon: 'folder', text: StringFormat.capFirst(Locale.group) }
+            { value: 'group', icon: 'folder', text: StringFormat.capFirst(Locale.group) },
+            {
+                value: 'import-csv',
+                icon: 'file',
+                text: 'Import CSV'
+            }
         ];
         if (this.el) {
             this.render();
