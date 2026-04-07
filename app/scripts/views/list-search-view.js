@@ -151,7 +151,7 @@ class ListSearchView extends View {
             { value: 'group', icon: 'folder', text: StringFormat.capFirst(Locale.group) },
             {
                 value: 'import-csv',
-                icon: 'file',
+                icon: 'file-text',
                 text: 'Import CSV'
             }
         ];
@@ -418,6 +418,9 @@ class ListSearchView extends View {
                 break;
             case 'group':
                 this.emit('create-group');
+                break;
+            case 'import-csv':
+                this.emit('import-csv');
                 break;
             case 'tmpl':
                 this.emit('create-template');
