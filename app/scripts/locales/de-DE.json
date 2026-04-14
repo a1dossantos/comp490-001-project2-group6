@@ -170,6 +170,7 @@
   "searchRegex": "RegEx",
   "searchRank": "Automatisch",
   "searchExact": "Exakt",
+  "searchHideExpired": "Hide Expired",
   "openOpen": "Öffnen",
   "openNew": "Neu",
   "openNewFile": "Neu",

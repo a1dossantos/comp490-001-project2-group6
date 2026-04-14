@@ -175,6 +175,7 @@
   "searchRegex": "RegEx",
   "searchRank": "Auto",
   "searchExact": "Exact",
+  "searchHideExpired": "Hide Expired",
   "openOpen": "Open",
   "openNew": "New",
   "openNewFile": "New",
