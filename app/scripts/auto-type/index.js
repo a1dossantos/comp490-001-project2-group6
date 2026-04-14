@@ -281,6 +281,19 @@ const AutoType = {
         });
         this.selectEntryView.on('result', (result) => {
             logger.debug('Entry selected', result);
+
+            // CAPS LOCK CHECK
+            // This triggers specifically after the user clicks the password in the list
+            if (window.event?.getModifierState?.('CapsLock')) {
+                Alerts.error({
+                    header: Locale.autoTypeError || 'Auto-Type Error',
+                    body: 'Caps Lock is on. Please turn it off to use Auto-Type.'
+                });
+                // We do NOT call hideWindow or runAndHandleResult,
+                // effectively stopping the process here.
+                return;
+            }
+
             this.selectEntryView.off('result');
             this.selectEntryView.remove();
             this.selectEntryView = null;
