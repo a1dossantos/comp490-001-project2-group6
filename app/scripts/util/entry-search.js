@@ -9,6 +9,16 @@ class EntrySearch {
         if (!filter) {
             return true;
         }
+
+        // checking if "Hide Expired" option is ticked
+        if (filter.advanced && filter.advanced.hideExpired) {
+            // checking if entry is expired
+            if (this.model.expired) {
+                // tells function that entry does not fit filter
+                return false;
+            }
+        }
+
         if (filter.tagLower) {
             if (this.model.searchTags && this.model.searchTags.indexOf(filter.tagLower) < 0) {
                 return false;

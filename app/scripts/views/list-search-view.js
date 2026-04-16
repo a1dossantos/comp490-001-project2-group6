@@ -113,6 +113,7 @@ class ListSearchView extends View {
             cs: false,
             regex: false,
             history: false,
+            hideExpired: false,
             title: true
         };
         if (this.model.advancedSearch) {
