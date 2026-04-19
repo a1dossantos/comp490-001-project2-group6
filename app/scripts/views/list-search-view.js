@@ -152,7 +152,7 @@ class ListSearchView extends View {
             { value: 'group', icon: 'folder', text: StringFormat.capFirst(Locale.group) },
             {
                 value: 'import-csv',
-                icon: 'file-text',
+                icon: 'paperclip',
                 text: 'Import CSV'
             }
         ];
