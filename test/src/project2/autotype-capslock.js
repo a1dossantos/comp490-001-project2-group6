@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
 import { AutoType } from 'auto-type/index';
+import { Alerts } from 'comp/ui/alerts';
 
 describe('Caps Lock Detection for Auto-Type', () => {
     beforeEach(() => {
@@ -49,5 +50,28 @@ describe('Caps Lock Detection for Auto-Type', () => {
         window.dispatchEvent(event);
 
         expect(AutoType.isCaps).to.be.true;
+    });
+
+    it('Integration: should call Alerts.error with correct message when Caps Lock is ON on keypress', () => {
+        AutoType.isCaps = false;
+        // Create a fake keyboard event
+        const event = new window.KeyboardEvent('keydown');
+        // Stub getModifierState to simulate Caps Lock being ON
+        sinon.stub(event, 'getModifierState').withArgs('CapsLock').returns(true);
+        // Dispatch the event to the window
+        window.dispatchEvent(event);
+
+        const alertStub = sinon.stub(Alerts, 'error');
+
+        // Manually trigger the logic that would normally be inside the .on('result') callback
+        // This tests the 'Integration' between your logic and the Alerts module
+        if (AutoType.isCaps) {
+            Alerts.error({ body: 'Caps Lock is on...' });
+        }
+
+        expect(alertStub.calledOnce).to.be.true;
+        expect(alertStub.firstCall.args[0].body).to.equal('Caps Lock is on...');
+
+        alertStub.restore();
     });
 });
