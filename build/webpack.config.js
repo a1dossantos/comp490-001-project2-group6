@@ -52,7 +52,7 @@ function config(options) {
                 morphdom: `morphdom/dist/morphdom-umd${devMode ? '' : '.min'}.js`,
                 kdbxweb: `kdbxweb/dist/kdbxweb${devMode ? '' : '.min'}.js`,
                 baron: `baron/baron${devMode ? '' : '.min'}.js`,
-                qrcode: `jsqrcode/dist/qrcode${devMode ? '' : '.min'}.js`,
+                'qrcode$': `jsqrcode/dist/qrcode${devMode ? '' : '.min'}.js`,
                 argon2: 'argon2-browser/dist/argon2.js',
                 marked: devMode ? 'marked/lib/marked.js' : 'marked/marked.min.js',
                 dompurify: `dompurify/dist/purify${devMode ? '' : '.min'}.js`,
