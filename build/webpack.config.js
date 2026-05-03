@@ -27,7 +27,8 @@ function config(options) {
         },
         output: {
             path: path.resolve('.', 'tmp'),
-            filename: 'js/[name].js'
+            filename: 'js/[name].js',
+            publicPath: '/keeweb/'
         },
         target: 'web',
         performance: {

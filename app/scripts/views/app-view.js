@@ -27,6 +27,8 @@ import { TagView } from 'views/tag-view';
 import { ImportCsvView } from 'views/import-csv-view';
 import { TitlebarView } from 'views/titlebar-view';
 import template from 'templates/app.hbs';
+import { Storage } from 'storage';
+import { FileSaver } from 'util/ui/file-saver';
 
 class AppView extends View {
     parent = 'body';
@@ -77,6 +79,7 @@ class AppView extends View {
         this.listenTo(Events, 'show-file', this.showFileSettings);
         this.listenTo(Events, 'open-file', this.toggleOpenFile);
         this.listenTo(Events, 'save-all', this.saveAll);
+        this.listenTo(Events, 'save-as', this.saveAsPressed);
         this.listenTo(Events, 'remote-key-changed', this.remoteKeyChanged);
         this.listenTo(Events, 'key-change-pending', this.keyChangePending);
         this.listenTo(Events, 'toggle-settings', this.toggleSettings);
@@ -114,6 +117,12 @@ class AppView extends View {
                 '*'
             );
         }
+
+        this.onKey(
+            Keys.DOM_VK_S,
+            this.saveAsPressed,
+            KeyHandler.SHORTCUT_ACTION + KeyHandler.SHORTCUT_SHIFT
+        );
 
         this.setWindowClass();
         this.setupAutoSave();
@@ -643,6 +652,43 @@ class AppView extends View {
         this.model.files.forEach(function (file) {
             this.model.syncFile(file);
         }, this);
+    }
+
+    saveAsPressed(e) {
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        }
+
+        const file = this.model.files.find((f) => f.active);
+
+        if (!file) {
+            return;
+        }
+
+        this.model.getData((data) => {
+            if (!data) return;
+
+            const fileName = file.name + '.kdbx';
+
+            if (Launcher) {
+                Launcher.getSaveFileName(fileName, (path) => {
+                    if (path) {
+                        Storage.file.save(path, null, data, (err) => {
+                            if (err) {
+                                Alerts.error({
+                                    header: 'Save Error',
+                                    body: 'Failed to save file: ' + path,
+                                    pre: err
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                const blob = new Blob([data], { type: 'application/octet-stream' });
+                FileSaver.saveAs(blob, fileName);
+            }
+        });
     }
 
     setupAutoSave() {
