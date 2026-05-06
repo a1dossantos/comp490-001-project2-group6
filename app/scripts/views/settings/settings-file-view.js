@@ -17,6 +17,7 @@ import { FileSaver } from 'util/ui/file-saver';
 import { OpenConfigView } from 'views/open-config-view';
 import { omit } from 'util/fn';
 import template from 'templates/settings/settings-file.hbs';
+import QRCode from 'qrcode/lib/browser.js';
 
 const DefaultBackupPath = 'Backups/{name}.{date}.bak';
 const DefaultBackupSchedule = '1w';
@@ -435,11 +436,86 @@ class SettingsFileView extends View {
     }
 
     generateKeyFile() {
-        this.model.generateAndSetKeyFile().then((keyFile) => {
-            const blob = new Blob([keyFile], { type: 'application/octet-stream' });
-            FileSaver.saveAs(blob, this.model.name + '.key');
-            this.renderKeyFileSelect();
-        });
+        this.model
+            .generateAndSetKeyFile()
+            .then((keyFile) => {
+                // 1. Save the actual .key file first
+                const keyBlob = new Blob([keyFile], { type: 'application/octet-stream' });
+                FileSaver.saveAs(keyBlob, this.model.name + '.key');
+
+                // 2. Prepare the XML string for the QR code content
+                const xmlString = new TextDecoder('utf-8').decode(keyFile);
+
+                // 3. Attempt to save the QR code image
+                this.saveQrCode(xmlString);
+            })
+            .catch((err) => {
+                Alerts.error({ header: 'Error', body: 'Failed to generate key', pre: err });
+            })
+            .finally(() => {
+                // CRITICAL: Refresh UI dropdown state so it doesn't "break"
+                this.renderKeyFileSelect();
+            });
+    }
+
+    saveQrCode(text) {
+        try {
+            /**
+             * MODULE RESOLUTION (Defensive Coding)
+             * In Webpack/Electron environments, libraries can be exported as a
+             * namespace or wrapped in a .default property. This check ensures we
+             * find the valid library object regardless of how it was bundled.
+             */
+            const QR = QRCode?.toDataURL
+                ? QRCode
+                : QRCode?.default?.toDataURL
+                ? QRCode.default
+                : null;
+
+            // Stops QR saving if method is not found
+            if (!QR) {
+                return Alerts.error({
+                    header: 'QR Error',
+                    body: 'QRCode.toDataURL not found'
+                });
+            }
+
+            // Generate the QR as a Base64 Data URL (e.g., "data:image/png;base64,iVBORw...")
+            QR.toDataURL(text, {
+                width: 256,
+                errorCorrectionLevel: 'M' // Medium error correction (good balance of density and reliability)
+            })
+                .then((dataUrl) => {
+                    /**
+                     * DATA CONVERSION: Base64 string → Binary Blob
+                     * FileSaver requires a Blob, but the QR library provides a Data URL.
+                     */
+
+                    // 1. Extract the raw Base64 data
+                    const base64Data = dataUrl.split(',')[1];
+                    // 2. Buffer handles the base64-to-binary translation natively
+                    const buffer = Buffer.from(base64Data, 'base64');
+
+                    // Create blob directly from the buffer
+                    const blob = new Blob([buffer], { type: 'image/png' });
+                    FileSaver.saveAs(blob, this.model.name + '-key-qr.png');
+                })
+                .catch((err) => {
+                    // Handles errors occurring during the async generation or conversion
+                    Alerts.error({
+                        header: 'QR Error',
+                        body: 'Failed to generate QR code',
+                        pre: err
+                    });
+                });
+        } catch (e) {
+            // Handles synchronous errors (like the library being missing)
+            Alerts.error({
+                header: 'QR Error',
+                body: e.message,
+                pre: e
+            });
+        }
     }
 
     clearKeyFile() {

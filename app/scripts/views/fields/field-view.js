@@ -233,6 +233,7 @@ class FieldView extends View {
         const options = [];
 
         options.push({ value: 'copy', icon: 'copy', text: Locale.alertCopy });
+        options.push({ value: 'Color Password', icon: 'globe', text: 'Make password colorful' });
 
         if (this.value instanceof kdbxweb.ProtectedValue) {
             if (this.valueEl.hasClass('details__field-value--revealed')) {
@@ -281,6 +282,9 @@ class FieldView extends View {
                 break;
             case 'autotype':
                 this.emit('autotype', { source: this });
+                break;
+            case 'Color Password':
+                this.emit('color', { source: this });
                 break;
         }
     }

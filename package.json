@@ -28,7 +28,6 @@
     "base64-inline-loader": "^1.1.1",
     "base64-loader": "1.0.0",
     "bourbon": "^7.0.0",
-    "chai": "^4.3.4",
     "cross-env": "^7.0.3",
     "css-loader": "^5.2.4",
     "dompurify": "^2.2.8",
@@ -75,7 +74,6 @@
     "lodash": "^4.17.21",
     "marked": "^2.0.3",
     "mini-css-extract-plugin": "^1.6.0",
-    "mocha": "^8.4.0",
     "morphdom": "^2.6.1",
     "node-fetch": "^2.6.1",
     "normalize.css": "8.0.1",
@@ -86,6 +84,7 @@
     "postcss-loader": "^5.2.0",
     "prettier": "^2.2.1",
     "puppeteer": "^9.1.1",
+    "qrcode": "^1.5.3",
     "raw-loader": "^4.0.2",
     "run-remote-task": "^0.5.0",
     "sass": "^1.32.12",
@@ -144,5 +143,9 @@
     "last 1 Opera version",
     "last 1 ChromeAndroid version",
     "Electron > 6.0.1"
-  ]
+  ],
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "mocha": "^11.7.5"
+  }
 }

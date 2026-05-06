@@ -12,7 +12,10 @@
         <script src="../node_modules/mocha/mocha.js"></script>
 
         <script class="mocha-init">
-            mocha.setup('bdd');
+            mocha.setup({
+                ui: 'bdd',
+                globals: ['Buffer']
+            });
             mocha.checkLeaks();
         </script>
         <script src="dist/test.bundle.js"></script>
