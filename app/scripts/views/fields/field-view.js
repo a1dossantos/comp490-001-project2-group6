@@ -12,6 +12,7 @@ import { DropdownView } from 'views/dropdown-view';
 import { AppSettingsModel } from 'models/app-settings-model';
 import { Timeouts } from 'const/timeouts';
 import template from 'templates/details/fields/field.hbs';
+import { Colors } from 'const/colors'; // Importing the colors
 
 class FieldView extends View {
     template = template;
@@ -21,7 +22,8 @@ class FieldView extends View {
         'dblclick .details__field-label': 'fieldLabelDblClick',
         'click .details__field-value': 'fieldValueClick',
         'dragstart .details__field-label': 'fieldLabelDrag',
-        'click .details__field-options': 'fieldOptionsClick'
+        'click .details__field-options': 'fieldOptionsClick',
+        'click .details__field-btn-reveal': 'revealBtnClick'
     };
 
     constructor(model, options) {
@@ -161,6 +163,7 @@ class FieldView extends View {
             return;
         }
         this.valueEl.removeClass('details__field-value--revealed');
+         this.$el.find('.details__field-btn-reveal').removeClass('fa-eye-slash').addClass('fa-eye');
         this.$el.addClass('details__field--edit');
         this.startEdit();
         this.editing = true;
@@ -330,6 +333,17 @@ class FieldView extends View {
         colorMenu.once('cancel', () => {
             colorMenu.remove();
         });
+    }
+
+    revealBtnClick(e) {
+        const btn = $(e.currentTarget);
+        if (this.valueEl.hasClass('details__field-value--revealed')) {
+            this.hideValue();
+            btn.removeClass('fa-eye-slash').addClass('fa-eye');
+        } else {
+            this.revealValue();
+            btn.removeClass('fa-eye').addClass('fa-eye-slash');
+        }
     }
 
     revealValue() {
