@@ -1,3 +1,40 @@
+<h1>COMP490-001 Project 2 Group 6</h1>
+<h6>
+Emily Bradford<br />
+Cardelina Levanti<br />
+Alex Dos Santos<br />
+</h6>
+
+<h3>KeeWeb</h3>
+
+<p>KeeWeb is an open source password manager. It is compatible with KeePass databases and can be run as either a desktop application or directly within a web browser.</p>
+
+<h3>Building and Running on Debian/Linux</h3>
+
+<p>To build this app requires Node.js and NPM (Node Package Manager).</p>
+
+```
+# Installing Dependencies
+sudo apt update
+sudo apt install nodejs npm git
+
+# Cloning the Repository
+git clone https://github.com/a1dossantos/comp490-001-project2-group6.git
+cd ./comp490-001-project2-group6/
+
+# Installing packages
+npm install
+
+# Building the desktop app
+export NODE_OPTIONS=--openssl-legacy-provider
+npm run dev-desktop-linux
+```
+<p>If it successfully builds, the keeweb executable should be in the project's <b>tmp/desktop/keeweb-linux-x64/</b> directory.</p>
+<br />
+
+---
+
+<br />
 <div align="center">
 <h6>Password Manager</h6>
 <h1>KeeWeb Password Manager🔑</h1>

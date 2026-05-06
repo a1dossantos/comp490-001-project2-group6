@@ -21,11 +21,21 @@ const AutoType = {
     supportsEventsWithWindowId: !!(Launcher && Launcher.platform() === 'linux'),
     selectEntryView: false,
     running: false,
+    isCaps: false,
 
     init() {
         if (!this.enabled) {
             return;
         }
+
+        const syncCaps = (e) => {
+            if (e && typeof e.getModifierState === 'function') {
+                this.isCaps = e.getModifierState('CapsLock');
+            }
+        };
+
+        window.addEventListener('keydown', syncCaps, true);
+        window.addEventListener('mousedown', syncCaps, true);
         Events.on('auto-type', (e) => this.handleEvent(e));
     },
 
@@ -284,7 +294,7 @@ const AutoType = {
 
             // CAPS LOCK CHECK
             // This triggers specifically after the user clicks the password in the list
-            if (window.event?.getModifierState?.('CapsLock')) {
+            if (this.isCaps) {
                 Alerts.error({
                     header: Locale.autoTypeError || 'Auto-Type Error',
                     body: 'Caps Lock is on. Please turn it off to use Auto-Type.'

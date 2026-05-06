@@ -21,7 +21,10 @@
         <script src="../node_modules/mocha/mocha.js"></script>
 
         <script class="mocha-init">
-            mocha.setup('bdd');
+            mocha.setup({
+                ui: 'bdd',
+                globals: ['Buffer']
+            });
             mocha.checkLeaks();
             window.testErrors = 0;
         </script>
