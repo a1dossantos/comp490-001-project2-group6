@@ -288,6 +288,49 @@ class FieldView extends View {
                 break;
         }
     }
+    
+    passwordColor(colorView) {
+        if (
+            colorView.value instanceof kdbxweb.ProtectedValue &&
+            !colorView.valueEl.hasClass('details__field-value--revealed')
+        ) {
+            colorView.revealValue();
+        }
+        this.pickColor('Color for Letter', (letterColor) => {
+            this.pickColor('Color for number', (numberColor) => {
+                this.pickColor('Color for special character', (charColor) => {
+                    colorView.selectedColor = { letterColor, numberColor, charColor };
+                    colorView.applyColors();
+                });
+            });
+        });
+    }
+    pickColor(title, callback) {
+        const colorMenu = new DropdownView();
+        const colorPass = [
+            { value: null, text: title, icon: 'puzzle-piece', cls: 'details__color-popup-title' },
+            ...Colors.AllColors.map((color) => ({
+                value: '#' + Colors.ColorsValues[color],
+                text: color.charAt(0).toUpperCase() + color.slice(1),
+                icon: 'puzzle-piece',
+                cls: `details__colors-popup-item details__colors-popup-item--${color}`
+            }))
+        ];
+        const positionRect = this.valueEl[0].getBoundingClientRect();
+
+        colorMenu.render({
+            position: { top: positionRect.bottom, right: positionRect.right },
+            options: colorPass
+        });
+        colorMenu.once('select', (e) => {
+            if (!e.item) return;
+            colorMenu.remove();
+            callback(e.item);
+        });
+        colorMenu.once('cancel', () => {
+            colorMenu.remove();
+        });
+    }
 
     revealValue() {
         const revealedEl = PasswordPresenter.asDOM(this.value);
