@@ -18,7 +18,48 @@ class FieldViewText extends FieldView {
         super(model, options);
         this.once('remove', () => this.stopBlurListener());
     }
+    applyColors() {
+        if (!this.selectedColor) return;
+        const { letterColor, numberColor, charColor } = this.selectedColor;
 
+        // const text = this.value.isProtected ? this.value.getText() : this.value;
+        const text = this.getEditValue(this.value);
+        const fragment = document.createDocumentFragment();
+        for (const char of text) {
+            let color;
+            if (/[a-zA-Z]/.test(char)) {
+                color = letterColor;
+            } else if (/[0-9]/.test(char)) {
+                color = numberColor;
+            } else {
+                color = charColor;
+            }
+            const span = document.createElement('span');
+            span.textContent = char;
+            span.style.color = color;
+            fragment.appendChild(span);
+        }
+
+        const valueEl = this.valueEl.addClass('details__field-value--revealed').empty()[0];
+        valueEl.appendChild(fragment);
+    }
+     revealValue() {
+        const revealedEl = PasswordPresenter.asDOM(this.value);
+        this.valueEl.addClass('details__field-value--revealed').empty();
+        this.valueEl.append(revealedEl);
+        if (this.selectedColor) {
+            this.applyColors();
+        }
+    }
+
+    hideValue() {
+        this.selectedColor = null;
+        this.valueEl
+            .css('color', '')
+            .removeClass('details__field-value--revealed')
+            .html(this.renderValue(this.value));
+    }
+    
     renderValue(value) {
         if (this.model.markdown && AppSettingsModel.useMarkdown) {
             if (value && value.isProtected) {
