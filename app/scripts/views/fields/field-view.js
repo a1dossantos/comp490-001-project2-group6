@@ -163,7 +163,7 @@ class FieldView extends View {
             return;
         }
         this.valueEl.removeClass('details__field-value--revealed');
-         this.$el.find('.details__field-btn-reveal').removeClass('fa-eye-slash').addClass('fa-eye');
+        this.$el.find('.details__field-btn-reveal').removeClass('fa-eye-slash').addClass('fa-eye');
         this.$el.addClass('details__field--edit');
         this.startEdit();
         this.editing = true;
@@ -291,7 +291,7 @@ class FieldView extends View {
                 break;
         }
     }
-    
+
     passwordColor(colorView) {
         if (
             colorView.value instanceof kdbxweb.ProtectedValue &&
@@ -308,6 +308,7 @@ class FieldView extends View {
             });
         });
     }
+
     pickColor(title, callback) {
         const colorMenu = new DropdownView();
         const colorPass = [

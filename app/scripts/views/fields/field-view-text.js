@@ -18,6 +18,7 @@ class FieldViewText extends FieldView {
         super(model, options);
         this.once('remove', () => this.stopBlurListener());
     }
+
     applyColors() {
         if (!this.selectedColor) return;
         const { letterColor, numberColor, charColor } = this.selectedColor;
@@ -43,7 +44,8 @@ class FieldViewText extends FieldView {
         const valueEl = this.valueEl.addClass('details__field-value--revealed').empty()[0];
         valueEl.appendChild(fragment);
     }
-     revealValue() {
+
+    revealValue() {
         const revealedEl = PasswordPresenter.asDOM(this.value);
         this.valueEl.addClass('details__field-value--revealed').empty();
         this.valueEl.append(revealedEl);
@@ -59,7 +61,7 @@ class FieldViewText extends FieldView {
             .removeClass('details__field-value--revealed')
             .html(this.renderValue(this.value));
     }
-    
+
     renderValue(value) {
         if (this.model.markdown && AppSettingsModel.useMarkdown) {
             if (value && value.isProtected) {
